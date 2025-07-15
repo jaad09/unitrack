@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniTrack - التدريب التعاوني</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="bg-white p-2 rounded-lg">
+                        <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">UniTrack</h1>
+                        <p class="text-purple-100">منصة التدريب التعاوني - منطقة عسير</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6 space-x-reverse">
+                    <button id="studentBtn" class="bg-white bg-opacity-20 px-4 py-2 rounded-lg hover:bg-opacity-30 transition-all">واجهة الطالب</button>
+                    <button id="organizationBtn" class="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all">واجهة الجهة</button>
+                    <button id="subscriptionBtn" class="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all">الاشتراكات</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Student Interface -->
+    <div id="studentInterface" class="container mx-auto px-4 py-8">
+        <!-- Search and Filters -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">البحث عن فرص التدريب</h2>
+            <div class="grid md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">التخصص</label>
+                    <select id="majorFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="">جميع التخصصات</option>
+                        <option value="cs">علوم الحاسب</option>
+                        <option value="engineering">الهندسة</option>
+                        <option value="business">إدارة الأعمال</option>
+                        <option value="medicine">الطب</option>
+                        <option value="education">اخرى</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">المستوى الأكاديمي</label>
+                    <select id="levelFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="">جميع المستويات</option>
+                        <option value="beginner">مبتدئ</option>
+                        <option value="intermediate">متوسط</option>
+                        <option value="advanced">متقدم</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">المدينة</label>
+                    <select id="cityFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="">جميع المدن</option>
+                        <option value="abha">أبها</option>
+                        <option value="khamis">خميس مشيط</option>
+                        <option value="najran">نجران</option>
+                        <option value="bisha">بيشة</option>
+                        <option value="bisha">محايل عسير</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">مدة التدريب</label>
+                    <select id="durationFilter" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="">جميع المدد</option>
+                        <option value="1-3">1-3 أشهر</option>
+                        <option value="3-6">3-6 أشهر</option>
+                        <option value="6+">أكثر من 6 أشهر</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="searchOpportunities()" class="mt-4 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-all">
+                🔍 البحث
+            </button>
+        </div>
+
+        <!-- Training Opportunities -->
+        <div id="opportunitiesGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Opportunities will be populated here -->
+        </div>
+    </div>
+
+    <!-- Organization Interface -->
+    <div id="organizationInterface" class="container mx-auto px-4 py-8 hidden">
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">لوحة تحكم الجهة التدريبية</h2>
+            
+            <!-- Stats Cards -->
+            <div class="grid md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-blue-800">الفرص المنشورة</h3>
+                    <p class="text-2xl font-bold text-blue-600">12</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-green-800">الطلبات المقبولة</h3>
+                    <p class="text-2xl font-bold text-green-600">8</p>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-yellow-800">قيد المراجعة</h3>
+                    <p class="text-2xl font-bold text-yellow-600">5</p>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold text-red-800">المرفوضة</h3>
+                    <p class="text-2xl font-bold text-red-600">2</p>
+                </div>
+            </div>
+
+            <!-- Applications Management -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-4">طلبات التدريب الواردة</h3>
+                <div id="applicationsList" class="space-y-4">
+                    <!-- Applications will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Interface -->
+    <div id="subscriptionInterface" class="container mx-auto px-4 py-8 hidden">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">خطط الاشتراك</h2>
+            <p class="text-gray-600">اختر الخطة المناسبة لجهتك التدريبية</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <!-- Paid Plan -->
+            <div class="bg-white rounded-xl shadow-lg p-8 border-2 border-purple-200">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-purple-600 mb-2">الخطة المدفوعة</h3>
+                    <p class="text-gray-600 mb-4">للجهات المحلية والشركات</p>
+                    <div class="text-4xl font-bold text-purple-600 mb-2">500 ريال</div>
+                    <p class="text-gray-500">شهرياً</p>
+                </div>
+                
+                <ul class="space-y-3 mb-8">
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        إنشاء ملف جهة تدريب كامل
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        عرض فرص تدريب غير محدودة
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        إدارة المتدربين من خلال لوحة تحكم
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        تقارير أداء مفصلة للطلاب
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        دعم فني متقدم
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-all">
+                    اشترك الآن
+                </button>
+            </div>
+
+            <!-- Free Plan -->
+            <div class="bg-white rounded-xl shadow-lg p-8 border-2 border-green-200">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-green-600 mb-2">الخطة المجانية</h3>
+                    <p class="text-gray-600 mb-4">للجهات الحكومية وغير الربحية</p>
+                    <div class="text-4xl font-bold text-green-600 mb-2">مجاني</div>
+                    <p class="text-gray-500">دعماً للاستدامة والتنمية</p>
+                </div>
+                
+                <ul class="space-y-3 mb-8">
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        إنشاء ملف جهة تدريب
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        عرض فرص تدريب محدودة (5 فرص)
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        إدارة أساسية للمتدربين
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        تقارير أساسية
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 ml-2">✓</span>
+                        دعم المجتمع
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-all">
+                    ابدأ مجاناً
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-blue-50 rounded-xl p-6 text-center">
+            <h3 class="text-xl font-bold text-blue-800 mb-2">الجهات المؤهلة للخطة المجانية</h3>
+            <p class="text-blue-600">الجهات الحكومية • الجمعيات البيئية • الجمعيات السياحية • المنظمات غير الربحية</p>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const opportunities = [
+            {
+                id: 1,
+                title: "تدريب في تطوير البرمجيات",
+                company: "شركة التقنية المتقدمة",
+                location: "أبها",
+                distance: "2 كم",
+                duration: "3 أشهر",
+                major: "cs",
+                level: "intermediate",
+                city: "abha",
+                description: "فرصة تدريب في تطوير تطبيقات الويب والجوال",
+                requirements: "معرفة أساسية بالبرمجة"
+            },
+            {
+                id: 2,
+                title: "تدريب في الهندسة المدنية",
+                company: "مكتب الاستشارات الهندسية",
+                location: "خميس مشيط",
+                distance: "15 كم",
+                duration: "6 أشهر",
+                major: "engineering",
+                level: "advanced",
+                city: "khamis",
+                description: "تدريب على مشاريع البنية التحتية",
+                requirements: "طالب هندسة مدنية"
+            },
+            {
+                id: 3,
+                title: "تدريب في إدارة الأعمال",
+                company: "مجموعة الأعمال الجنوبية",
+                location: "أبها",
+                distance: "5 كم",
+                duration: "4 أشهر",
+                major: "business",
+                level: "beginner",
+                city: "abha",
+                description: "تدريب في إدارة المشاريع والتسويق",
+                requirements: "طالب إدارة أعمال"
+            }
+        ];
+
+        const applications = [
+            {
+                id: 1,
+                studentName: "أحمد محمد العسيري",
+                major: "علوم الحاسب",
+                gpa: "4.2",
+                position: "تدريب في تطوير البرمجيات",
+                status: "pending",
+                distance: "3 كم"
+            },
+            {
+                id: 2,
+                studentName: "فاطمة علي القحطاني",
+                major: "إدارة الأعمال",
+                gpa: "3.8",
+                position: "تدريب في التسويق",
+                status: "pending",
+                distance: "7 كم"
+            }
+        ];
+
+        // Interface switching
+        document.getElementById('studentBtn').addEventListener('click', () => {
+            showInterface('student');
+        });
+
+        document.getElementById('organizationBtn').addEventListener('click', () => {
+            showInterface('organization');
+        });
+
+        document.getElementById('subscriptionBtn').addEventListener('click', () => {
+            showInterface('subscription');
+        });
+
+        function showInterface(type) {
+            // Hide all interfaces
+            document.getElementById('studentInterface').classList.add('hidden');
+            document.getElementById('organizationInterface').classList.add('hidden');
+            document.getElementById('subscriptionInterface').classList.add('hidden');
+            
+            // Remove active state from all buttons
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('bg-white', 'bg-opacity-20');
+            });
+
+            // Show selected interface and activate button
+            if (type === 'student') {
+                document.getElementById('studentInterface').classList.remove('hidden');
+                document.getElementById('studentBtn').classList.add('bg-white', 'bg-opacity-20');
+                displayOpportunities(opportunities);
+            } else if (type === 'organization') {
+                document.getElementById('organizationInterface').classList.remove('hidden');
+                document.getElementById('organizationBtn').classList.add('bg-white', 'bg-opacity-20');
+                displayApplications();
+            } else if (type === 'subscription') {
+                document.getElementById('subscriptionInterface').classList.remove('hidden');
+                document.getElementById('subscriptionBtn').classList.add('bg-white', 'bg-opacity-20');
+            }
+        }
+
+        function displayOpportunities(opps) {
+            const grid = document.getElementById('opportunitiesGrid');
+            grid.innerHTML = opps.map(opp => `
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">${opp.title}</h3>
+                        <span class="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">${opp.duration}</span>
+                    </div>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-600 flex items-center">
+                            <span class="ml-2">🏢</span> ${opp.company}
+                        </p>
+                        <p class="text-gray-600 flex items-center">
+                            <span class="ml-2">📍</span> ${opp.location} (${opp.distance})
+                        </p>
+                        <p class="text-gray-600">${opp.description}</p>
+                    </div>
+                    <div class="border-t pt-4">
+                        <p class="text-sm text-gray-500 mb-3">${opp.requirements}</p>
+                        <button onclick="applyForOpportunity(${opp.id})" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-all">
+                            تقديم طلب التدريب
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayApplications() {
+            const list = document.getElementById('applicationsList');
+            list.innerHTML = applications.map(app => `
+                <div class="bg-white rounded-lg p-4 border border-gray-200">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800">${app.studentName}</h4>
+                            <p class="text-gray-600">${app.major} • المعدل: ${app.gpa}</p>
+                            <p class="text-sm text-gray-500">${app.position}</p>
+                            <p class="text-sm text-blue-600">المسافة: ${app.distance}</p>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="handleApplication(${app.id}, 'accept')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all">
+                                قبول
+                            </button>
+                            <button onclick="handleApplication(${app.id}, 'reject')" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all">
+                                رفض
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchOpportunities() {
+            const major = document.getElementById('majorFilter').value;
+            const level = document.getElementById('levelFilter').value;
+            const city = document.getElementById('cityFilter').value;
+            const duration = document.getElementById('durationFilter').value;
+
+            let filtered = opportunities.filter(opp => {
+                return (!major || opp.major === major) &&
+                       (!level || opp.level === level) &&
+                       (!city || opp.city === city);
+            });
+
+            // Sort by distance (closest first)
+            filtered.sort((a, b) => {
+                const distA = parseInt(a.distance);
+                const distB = parseInt(b.distance);
+                return distA - distB;
+            });
+
+            displayOpportunities(filtered);
+        }
+
+        function applyForOpportunity(id) {
+            alert('تم تقديم طلب التدريب بنجاح! سيتم التواصل معك قريباً.');
+        }
+
+        function handleApplication(id, action) {
+            const actionText = action === 'accept' ? 'قبول' : 'رفض';
+            alert(`تم ${actionText} الطلب بنجاح!`);
+            
+            // Update application status
+            const app = applications.find(a => a.id === id);
+            if (app) {
+                app.status = action === 'accept' ? 'accepted' : 'rejected';
+                displayApplications();
+            }
+        }
+
+        // Initialize with student interface
+        showInterface('student');
+    </script>
+</html>
